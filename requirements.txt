@@ -10,6 +10,7 @@ django-widget-tweaks==1.5.0
 fonttools==4.60.1
 kiwisolver==1.4.9
 matplotlib==3.10.7
+gunicorn
 narwhals==2.11.0
 numpy==2.3.4
 packaging==25.0
