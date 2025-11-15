@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}AgriSite - Land Insights{% endblock %}</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #2e7d32;
+            --secondary-color: #4caf50;
+            --accent-color: #8bc34a;
+            --dark-green: #1b5e20;
+            --light-green: #c8e6c9;
+            --text-dark: #2e3a47;
+            --text-light: #6b7280;
+            --bg-light: #f8f9fa;
+            --sidebar-width: 280px;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        main {
+            flex: 1;
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            color: white !important;
+            font-size: 1.5rem;
+        }
+        
+        .navbar-brand:hover {
+            color: var(--light-green) !important;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            font-weight: 500;
+            padding: 8px 20px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--dark-green);
+            border-color: var(--dark-green);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(46, 125, 50, 0.3);
+        }
+
+        .btn-outline-primary {
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+            font-weight: 500;
+        }
+
+        .btn-outline-primary:hover {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            color: white;
+        }
+        
+        .card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+        
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-bottom: none;
+            padding: 1rem 1.5rem;
+            font-weight: 600;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .stat-card i {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            opacity: 0.9;
+        }
+
+        .stat-card .card-text {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card .card-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0;
+        }
+        
+        .nav-link {
+            color: rgba(255, 255, 255, 0.9) !important;
+            padding: 12px 20px;
+            margin: 2px 0;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+        }
+        
+        .nav-link i {
+            width: 20px;
+            margin-right: 10px;
+            font-size: 1.1rem;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background-color: rgba(255, 255, 255, 0.15);
+            color: white !important;
+            transform: translateX(5px);
+        }
+
+        .nav-link.active {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
+            border-left: 3px solid var(--accent-color);
+        }
+        
+        .chart-container {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .chart-container h5 {
+            color: var(--text-dark);
+            font-weight: 600;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--light-green);
+        }
+        
+        .bg-gradient-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)) !important;
+        }
+
+        .user-dropdown .dropdown-toggle {
+            color: white !important;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 8px 15px;
+            transition: all 0.3s ease;
+        }
+
+        .user-dropdown .dropdown-toggle:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
+        }
+
+        .user-dropdown .dropdown-menu {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            padding: 0.5rem;
+            min-width: 200px;
+        }
+
+        .user-dropdown .dropdown-item {
+            border-radius: 8px;
+            padding: 10px 15px;
+            margin: 2px 0;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .user-dropdown .dropdown-item:hover {
+            background-color: var(--light-green);
+            color: var(--dark-green);
+        }
+
+        .user-dropdown .dropdown-divider {
+            margin: 0.5rem 0;
+        }
+
+        .breadcrumb {
+            background: transparent;
+            padding: 0;
+            margin-bottom: 1.5rem;
+        }
+
+        .breadcrumb-item a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .breadcrumb-item.active {
+            color: var(--text-light);
+        }
+
+        .alert {
+            border: none;
+            border-radius: 10px;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .alert-success {
+            background: linear-gradient(135deg, #d4edda, #c3e6cb);
+            color: #155724;
+            border-left: 4px solid #28a745;
+        }
+
+        .alert-info {
+            background: linear-gradient(135deg, #d1ecf1, #bee5eb);
+            color: #0c5460;
+            border-left: 4px solid #17a2b8;
+        }
+
+        .alert-warning {
+            background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+            color: #856404;
+            border-left: 4px solid #ffc107;
+        }
+
+        .alert-danger {
+            background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+            color: #721c24;
+            border-left: 4px solid #dc3545;
+        }
+
+        .table {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .table th {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            padding: 1rem;
+            font-weight: 600;
+        }
+
+        .table td {
+            padding: 1rem;
+            border-color: rgba(0, 0, 0, 0.05);
+            vertical-align: middle;
+        }
+
+        .badge {
+            font-weight: 500;
+            padding: 6px 12px;
+            border-radius: 20px;
+        }
+
+        .footer {
+            background: linear-gradient(135deg, var(--dark-green), var(--primary-color)) !important;
+            margin-top: auto;
+        }
+
+        .footer a {
+            color: var(--light-green);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer a:hover {
+            color: white;
+        }
+
+        /* Loading animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Notification animations */
+        @keyframes slideInDown {
+            from {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .alert-slide {
+            animation: slideInDown 0.5s ease-out;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .navbar-nav .nav-link {
+                padding: 10px 15px;
+            }
+            
+            .stat-card {
+                margin-bottom: 1rem;
+            }
+            
+            .chart-container {
+                padding: 1rem;
+            }
+
+            .alert {
+                padding: 1rem;
+                margin: 0 1rem 1rem 1rem;
+            }
+        }
+    </style>
+    
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-gradient-primary shadow-sm">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'home' %}">
+                <i class="fas fa-tractor me-2"></i>
+                AgriSite
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}" 
+                           href="{% url 'home' %}">
+                            <i class="fas fa-home"></i> Home
+                        </a>
+                    </li>
+                    {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}" 
+                           href="{% url 'dashboard' %}">
+                            <i class="fas fa-chart-line"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if 'parcel' in request.resolver_match.url_name %}active{% endif %}" 
+                           href="{% url 'land_parcel_list' %}">
+                            <i class="fas fa-map-marked-alt"></i> Land Parcels
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if 'analysis' in request.resolver_match.url_name %}active{% endif %}" 
+                           href="{% url 'analysis_reports' %}">
+                            <i class="fas fa-chart-bar"></i> Analysis
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+                
+                <ul class="navbar-nav">
+                    {% if user.is_authenticated %}
+                    <li class="nav-item dropdown user-dropdown">
+                        <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" 
+                           role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-user-circle me-2"></i>
+                            <span class="me-2">{{ user.username }}</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li>
+                                <span class="dropdown-item-text">
+                                    <small class="text-muted">Signed in as</small><br>
+                                    <strong>{{ user.get_full_name|default:user.username }}</strong>
+                                </span>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            {% if user.is_staff %}
+                            <li>
+                                <a class="dropdown-item" href="{% url 'admin:index' %}">
+                                    <i class="fas fa-cog me-2"></i>Admin Panel
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            {% endif %}
+                            <li>
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-user me-2"></i>My Profile
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-cog me-2"></i>Settings
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item text-danger" href="{% url 'logout' %}">
+                                    <i class="fas fa-sign-out-alt me-2"></i>Logout
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}">
+                            <i class="fas fa-sign-in-alt me-1"></i> Login
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-outline-light ms-2" href="{% url 'signup' %}">
+                            <i class="fas fa-user-plus me-1"></i> Sign Up
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Breadcrumb Navigation -->
+    {% block breadcrumb %}
+    <div class="container mt-3">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}"><i class="fas fa-home"></i></a></li>
+                {% block breadcrumb_items %}{% endblock %}
+            </ol>
+        </nav>
+    </div>
+    {% endblock %}
+
+    <!-- Main Content -->
+    <main class="py-4">
+        <!-- Messages/Alerts -->
+        {% if messages %}
+        <div class="container mb-4">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show alert-slide" role="alert">
+                <div class="d-flex align-items-center">
+                    {% if message.tags == 'success' %}
+                    <i class="fas fa-check-circle fa-lg me-3"></i>
+                    {% elif message.tags == 'error' %}
+                    <i class="fas fa-exclamation-circle fa-lg me-3"></i>
+                    {% elif message.tags == 'warning' %}
+                    <i class="fas fa-exclamation-triangle fa-lg me-3"></i>
+                    {% else %}
+                    <i class="fas fa-info-circle fa-lg me-3"></i>
+                    {% endif %}
+                    <div class="flex-grow-1">
+                        <strong class="d-block mb-1">
+                            {% if message.tags == 'success' %}
+                            Success!
+                            {% elif message.tags == 'error' %}
+                            Error!
+                            {% elif message.tags == 'warning' %}
+                            Warning!
+                            {% else %}
+                            Info
+                            {% endif %}
+                        </strong>
+                        {{ message }}
+                    </div>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer bg-dark text-light py-4 mt-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <h5 class="mb-3"><i class="fas fa-tractor me-2"></i>AgriSite</h5>
+                    <p class="mb-2">Comprehensive Land Analysis Platform</p>
+                    <small class="text-light">Empowering agricultural decisions through data-driven insights</small>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <div class="mb-3">
+                        <a href="#" class="text-light me-3"><i class="fab fa-github fa-lg"></i></a>
+                        <a href="#" class="text-light me-3"><i class="fab fa-twitter fa-lg"></i></a>
+                        <a href="#" class="text-light"><i class="fab fa-linkedin fa-lg"></i></a>
+                    </div>
+                    <p class="mb-0">&copy; 2024 AgriSite. All rights reserved.</p>
+                    <small class="text-light">v1.0.0</small>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize tooltips
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+
+            // Enhanced auto-dismiss alerts with progress bar
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(function(alert) {
+                // Create progress bar
+                const progressBar = document.createElement('div');
+                progressBar.className = 'progress mt-2';
+                progressBar.style.height = '3px';
+                progressBar.innerHTML = `
+                    <div class="progress-bar" role="progressbar" style="width: 100%; transition: width 5s linear;"></div>
+                `;
+                alert.appendChild(progressBar);
+
+                // Start progress bar animation
+                setTimeout(() => {
+                    progressBar.querySelector('.progress-bar').style.width = '0%';
+                }, 100);
+
+                // Auto-dismiss after 5 seconds
+                setTimeout(function() {
+                    const bsAlert = new bootstrap.Alert(alert);
+                    bsAlert.close();
+                }, 5000);
+            });
+
+            // Add loading state to buttons
+            document.querySelectorAll('form').forEach(function(form) {
+                form.addEventListener('submit', function() {
+                    const submitBtn = form.querySelector('button[type="submit"]');
+                    if (submitBtn && !submitBtn.disabled) {
+                        submitBtn.disabled = true;
+                        const originalText = submitBtn.innerHTML;
+                        submitBtn.innerHTML = '<span class="loading me-2"></span> Processing...';
+                        
+                        // Re-enable button after 10 seconds (safety measure)
+                        setTimeout(() => {
+                            if (submitBtn.disabled) {
+                                submitBtn.disabled = false;
+                                submitBtn.innerHTML = originalText;
+                            }
+                        }, 10000);
+                    }
+                });
+            });
+
+            // Add smooth scrolling to alerts
+            const alertContainer = document.querySelector('.container.mb-4');
+            if (alertContainer) {
+                alertContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+
+        // Utility function for API calls
+        function makeApiCall(url, options = {}) {
+            return fetch(url, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}',
+                    ...options.headers
+                },
+                ...options
+            });
+        }
+    </script>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

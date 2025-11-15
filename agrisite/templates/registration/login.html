@@ -1,0 +1,152 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+
+{% block title %}Login - AgriSite{% endblock %}
+
+{% block content %}
+<!-- ... rest of login.html content ... -->
+<div class="container-fluid py-5" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh;">
+    <div class="row justify-content-center">
+        <div class="col-xl-4 col-lg-6 col-md-8">
+            <div class="card shadow-lg border-0 rounded-3">
+                <div class="card-header bg-gradient-primary text-white text-center py-4 border-0">
+                    <h2 class="fw-bold mb-0">
+                        <i class="fas fa-tractor me-2"></i>AgriSite
+                    </h2>
+                    <p class="mb-0 mt-2 opacity-75">Land Insights & Analysis</p>
+                </div>
+                
+                <div class="card-body p-5">
+                    <h4 class="text-center mb-4">Welcome Back</h4>
+                    
+                    {% if form.errors %}
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        Invalid username or password. Please try again.
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                    {% endif %}
+
+                    <form method="post" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        
+                        <div class="form-group mb-4">
+                            <label for="id_username" class="form-label fw-semibold">
+                                <i class="fas fa-user me-2"></i>Username
+                            </label>
+                            <input type="text" name="username" class="form-control form-control-lg" 
+                                   placeholder="Enter your username" required id="id_username">
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label for="id_password" class="form-label fw-semibold">
+                                <i class="fas fa-lock me-2"></i>Password
+                            </label>
+                            <input type="password" name="password" class="form-control form-control-lg" 
+                                   placeholder="Enter your password" required id="id_password">
+                        </div>
+
+                        <div class="d-grid mb-4">
+                            <button type="submit" class="btn btn-primary btn-lg shadow">
+                                <i class="fas fa-sign-in-alt me-2"></i>Sign In
+                            </button>
+                        </div>
+                        
+                        <input type="hidden" name="next" value="{{ next }}">
+                    </form>
+
+                    <div class="text-center">
+                        <p class="mb-3">
+                            <a href="#" class="text-decoration-none text-muted">
+                                <i class="fas fa-key me-1"></i>Forgot your password?
+                            </a>
+                        </p>
+                        
+                        <div class="border-top pt-4">
+                            <h6 class="text-muted mb-3">Demo Accounts</h6>
+                            <div class="row g-2 text-start">
+                                <div class="col-12">
+                                    <small class="text-muted">
+                                        <strong>Admin:</strong> admin / admin123
+                                    </small>
+                                </div>
+                                <div class="col-12">
+                                    <small class="text-muted">
+                                        <strong>Farmer:</strong> farmer1 / farmer123
+                                    </small>
+                                </div>
+                                <div class="col-12">
+                                    <small class="text-muted">
+                                        <strong>Manager:</strong> manager1 / manager123
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card-footer text-center py-3 border-0">
+                    <small class="text-muted">
+                        &copy; 2024 AgriSite. Land Analysis Platform.
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.form-control {
+    border-radius: 10px;
+    border: 2px solid #e9ecef;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: #4CAF50;
+    box-shadow: 0 0 0 0.2rem rgba(76, 175, 80, 0.25);
+}
+
+.btn-primary {
+    border-radius: 10px;
+    background: linear-gradient(135deg, #4CAF50, #45a049);
+    border: none;
+    padding: 12px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
+}
+
+.card {
+    border: none;
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.95);
+}
+
+.card-header {
+    border-radius: 10px 10px 0 0 !important;
+    background: linear-gradient(135deg, #4CAF50, #45a049) !important;
+}
+</style>
+
+<script>
+// Form validation
+document.addEventListener('DOMContentLoaded', function() {
+    const forms = document.querySelectorAll('.needs-validation');
+    
+    Array.from(forms).forEach(form => {
+        form.addEventListener('submit', event => {
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            form.classList.add('was-validated');
+        }, false);
+    });
+});
+</script>
+{% endblock %}

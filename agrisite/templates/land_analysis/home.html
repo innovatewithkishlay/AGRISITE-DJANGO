@@ -1,0 +1,1099 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Home - AgriSite - Land Insights & Analysis{% endblock %}
+
+{% block breadcrumb_items %}
+<li class="breadcrumb-item active" aria-current="page">Home</li>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    :root {
+        --primary-gradient: linear-gradient(135deg, #2e7d32 0%, #4caf50 50%, #8bc34a 100%);
+        --secondary-gradient: linear-gradient(135deg, #8bc34a 0%, #cddc39 100%);
+        --dark-green: #1b5e20;
+        --light-green: #e8f5e9;
+        --accent-orange: #ff9800;
+        --accent-blue: #2196f3;
+    }
+
+    .hero-section {
+        background: var(--primary-gradient);
+        color: white;
+        padding: 120px 0 100px;
+        position: relative;
+        overflow: hidden;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+    }
+
+    .hero-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: 
+            radial-gradient(circle at 20% 80%, rgba(76, 175, 80, 0.3) 0%, transparent 50%),
+            radial-gradient(circle at 80% 20%, rgba(139, 195, 74, 0.3) 0%, transparent 50%),
+            radial-gradient(circle at 40% 40%, rgba(46, 125, 50, 0.4) 0%, transparent 50%);
+        animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+        0%, 100% { transform: translateY(0px) rotate(0deg); }
+        50% { transform: translateY(-20px) rotate(1deg); }
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 2;
+    }
+
+    .hero-badge {
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50px;
+        padding: 8px 20px;
+        display: inline-block;
+        margin-bottom: 20px;
+        font-size: 0.9rem;
+        animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+    }
+
+    .feature-icon {
+        width: 100px;
+        height: 100px;
+        background: var(--primary-gradient);
+        border-radius: 25px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 2rem;
+        color: white;
+        font-size: 2.5rem;
+        position: relative;
+        transition: all 0.3s ease;
+        box-shadow: 0 10px 30px rgba(46, 125, 50, 0.3);
+    }
+
+    .feature-icon::after {
+        content: '';
+        position: absolute;
+        top: -5px;
+        left: -5px;
+        right: -5px;
+        bottom: -5px;
+        background: var(--secondary-gradient);
+        border-radius: 30px;
+        z-index: -1;
+        opacity: 0;
+        transition: all 0.3s ease;
+    }
+
+    .feature-card:hover .feature-icon {
+        transform: translateY(-10px) scale(1.1);
+    }
+
+    .feature-card:hover .feature-icon::after {
+        opacity: 1;
+        transform: scale(1.1);
+    }
+
+    .stat-number {
+        font-size: 3.5rem;
+        font-weight: 800;
+        background: var(--primary-gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        line-height: 1;
+        margin-bottom: 0.5rem;
+    }
+
+    .stat-card {
+        background: white;
+        border-radius: 20px;
+        padding: 2rem 1.5rem;
+        text-align: center;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        border: 1px solid rgba(0, 0, 0, 0.05);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .stat-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 5px;
+        background: var(--primary-gradient);
+    }
+
+    .stat-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+    }
+
+    .cta-section {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        padding: 100px 0;
+        position: relative;
+    }
+
+    .cta-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%234caf50' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
+    }
+
+    .testimonial-card {
+        border-left: 5px solid var(--accent-orange);
+        background: white;
+        border-radius: 15px;
+        padding: 2rem;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .testimonial-card::before {
+        content: '"';
+        position: absolute;
+        top: 20px;
+        right: 30px;
+        font-size: 6rem;
+        color: var(--light-green);
+        font-family: Georgia, serif;
+        line-height: 1;
+        z-index: 0;
+    }
+
+    .testimonial-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+    }
+
+    .parcel-card {
+        transition: all 0.3s ease;
+        border: 1px solid rgba(0,0,0,0.05);
+        border-radius: 15px;
+        overflow: hidden;
+    }
+
+    .parcel-card:hover {
+        transform: translateY(-5px);
+        border-color: var(--accent-blue);
+        box-shadow: 0 15px 50px rgba(33, 150, 243, 0.2);
+    }
+
+    .soil-badge {
+        font-size: 0.8rem;
+        padding: 6px 15px;
+        border-radius: 20px;
+        font-weight: 600;
+    }
+
+    .animation-fade-in {
+        animation: fadeInUp 1s ease-out;
+    }
+
+    @keyframes fadeInUp {
+        from { 
+            opacity: 0; 
+            transform: translateY(50px); 
+        }
+        to { 
+            opacity: 1; 
+            transform: translateY(0); 
+        }
+    }
+
+    .floating-elements {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        pointer-events: none;
+    }
+
+    .floating-element {
+        position: absolute;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+        animation: floatElement 15s infinite linear;
+    }
+
+    @keyframes floatElement {
+        0% { transform: translateY(0px) rotate(0deg); }
+        100% { transform: translateY(-1000px) rotate(360deg); }
+    }
+
+    .interactive-map {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 20px;
+        padding: 2rem;
+        color: white;
+        position: relative;
+        overflow: hidden;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .interactive-map:hover {
+        transform: scale(1.02);
+        box-shadow: 0 20px 60px rgba(102, 126, 234, 0.4);
+    }
+
+    .weather-widget {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        border-radius: 20px;
+        padding: 2rem;
+        color: white;
+        text-align: center;
+    }
+
+    .progress-ring {
+        transform: rotate(-90deg);
+    }
+
+    .progress-ring-circle {
+        transition: stroke-dashoffset 0.35s;
+        transform: rotate(90deg);
+        transform-origin: 50% 50%;
+    }
+
+    .news-ticker {
+        background: var(--dark-green);
+        color: white;
+        padding: 1rem 0;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .ticker-content {
+        display: inline-block;
+        white-space: nowrap;
+        animation: ticker 30s linear infinite;
+    }
+
+    @keyframes ticker {
+        0% { transform: translateX(100%); }
+        100% { transform: translateX(-100%); }
+    }
+
+    .glow-button {
+        background: var(--primary-gradient);
+        border: none;
+        border-radius: 50px;
+        padding: 15px 40px;
+        color: white;
+        font-weight: 600;
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        box-shadow: 0 10px 30px rgba(46, 125, 50, 0.4);
+    }
+
+    .glow-button::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+        transition: left 0.5s;
+    }
+
+    .glow-button:hover::before {
+        left: 100%;
+    }
+
+    .glow-button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 40px rgba(46, 125, 50, 0.6);
+    }
+
+    .feature-highlight {
+        position: relative;
+        background: white;
+        border-radius: 20px;
+        padding: 3rem 2rem;
+        text-align: center;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .feature-highlight::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 5px;
+        background: var(--secondary-gradient);
+        border-radius: 20px 20px 0 0;
+    }
+
+    .pricing-card {
+        background: white;
+        border-radius: 20px;
+        padding: 2.5rem;
+        text-align: center;
+        box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .pricing-card.popular {
+        border-color: var(--accent-orange);
+        transform: scale(1.05);
+    }
+
+    .pricing-card.popular::before {
+        content: 'Most Popular';
+        position: absolute;
+        top: 20px;
+        right: -30px;
+        background: var(--accent-orange);
+        color: white;
+        padding: 5px 40px;
+        transform: rotate(45deg);
+        font-size: 0.8rem;
+        font-weight: 600;
+    }
+
+    .pricing-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 25px 80px rgba(0, 0, 0, 0.15);
+    }
+
+    .pricing-card.popular:hover {
+        transform: scale(1.05) translateY(-10px);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .hero-section {
+            padding: 100px 0 60px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+        }
+        
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            font-size: 2rem;
+        }
+        
+        .pricing-card.popular {
+            transform: scale(1);
+        }
+        
+        .pricing-card.popular:hover {
+            transform: translateY(-10px);
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- News Ticker -->
+<div class="news-ticker">
+    <div class="container">
+        <div class="ticker-content">
+            <span class="fw-bold me-4">📢 Latest Updates:</span>
+            <span class="me-4">🚀 New Soil Analysis Feature Released</span>
+            •
+            <span class="me-4">🌧️ Weather Integration Now Available</span>
+            •
+            <span class="me-4">📊 Enhanced Dashboard Analytics</span>
+            •
+            <span class="me-4">🌱 Crop Rotation Planner Launched</span>
+        </div>
+    </div>
+</div>
+
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="floating-elements">
+        <div class="floating-element" style="width: 100px; height: 100px; top: 10%; left: 5%; animation-delay: 0s;"></div>
+        <div class="floating-element" style="width: 150px; height: 150px; top: 20%; right: 10%; animation-delay: -5s;"></div>
+        <div class="floating-element" style="width: 80px; height: 80px; bottom: 30%; left: 15%; animation-delay: -10s;"></div>
+        <div class="floating-element" style="width: 120px; height: 120px; bottom: 20%; right: 5%; animation-delay: -15s;"></div>
+    </div>
+    
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 hero-content animation-fade-in">
+                <div class="hero-badge">
+                    <i class="fas fa-star me-2"></i>Trusted by 10,000+ Farmers
+                </div>
+                
+                <h1 class="display-3 fw-bold mb-4">Transform Agriculture with <span class="text-warning">AI-Powered</span> Insights</h1>
+                <p class="lead mb-4 fs-4">Revolutionary platform combining land analysis, irrigation optimization, and crop intelligence for maximum productivity and sustainability.</p>
+                
+                <div class="d-flex flex-wrap gap-3 mb-4">
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'dashboard' %}" class="glow-button">
+                        <i class="fas fa-chart-line me-2"></i>Explore Dashboard
+                    </a>
+                    <a href="{% url 'land_parcel_list' %}" class="btn btn-outline-light btn-lg px-4 py-3 fw-semibold">
+                        <i class="fas fa-map-marked-alt me-2"></i>Manage Parcels
+                    </a>
+                    {% else %}
+                    <a href="{% url 'login' %}" class="glow-button">
+                        <i class="fas fa-rocket me-2"></i>Start Free Trial
+                    </a>
+                    <a href="#features" class="btn btn-outline-light btn-lg px-4 py-3 fw-semibold">
+                        <i class="fas fa-play-circle me-2"></i>Watch Demo
+                    </a>
+                    {% endif %}
+                </div>
+
+                <div class="row text-center mt-4">
+                    <div class="col-4">
+                        <div class="text-light">
+                            <i class="fas fa-shield-alt fa-2x mb-2"></i>
+                            <div class="fw-bold">Secure</div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="text-light">
+                            <i class="fas fa-bolt fa-2x mb-2"></i>
+                            <div class="fw-bold">Fast</div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="text-light">
+                            <i class="fas fa-mobile-alt fa-2x mb-2"></i>
+                            <div class="fw-bold">Mobile</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="position-relative">
+                    <div class="interactive-map animation-fade-in" style="animation-delay: 0.5s;">
+                        <div class="row align-items-center">
+                            <div class="col-8">
+                                <h4 class="fw-bold mb-3">Live Field Monitoring</h4>
+                                <p class="mb-4">Real-time tracking of all your land parcels with weather integration and growth analytics.</p>
+                                <div class="d-flex gap-3">
+                                    <div class="text-center">
+                                        <div class="fw-bold fs-3">98%</div>
+                                        <small>Healthy</small>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="fw-bold fs-3">24/7</div>
+                                        <small>Monitoring</small>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="fw-bold fs-3">15+</div>
+                                        <small>Metrics</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="weather-widget rounded-3 p-3">
+                                    <i class="fas fa-sun fa-2x mb-2"></i>
+                                    <div class="fw-bold fs-5">28°C</div>
+                                    <small>Sunny</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Floating cards around the map -->
+                    <div class="position-absolute top-0 start-0 mt-n3 ms-n3">
+                        <div class="bg-white rounded-3 p-3 shadow-sm">
+                            <i class="fas fa-tint text-primary"></i>
+                        </div>
+                    </div>
+                    <div class="position-absolute top-0 end-0 mt-n3 me-n3">
+                        <div class="bg-white rounded-3 p-3 shadow-sm">
+                            <i class="fas fa-seedling text-success"></i>
+                        </div>
+                    </div>
+                    <div class="position-absolute bottom-0 start-0 mb-n3 ms-n3">
+                        <div class="bg-white rounded-3 p-3 shadow-sm">
+                            <i class="fas fa-chart-line text-info"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Statistics Section -->
+<section class="py-5 bg-white">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-md-3 col-6">
+                <div class="stat-card">
+                    <div class="stat-number" data-count="{{ total_land_holders }}">0</div>
+                    <p class="text-muted mb-2 fw-semibold">Land Holders</p>
+                    <div class="progress" style="height: 6px;">
+                        <div class="progress-bar bg-success" style="width: 85%"></div>
+                    </div>
+                    <small class="text-success">
+                        <i class="fas fa-arrow-up me-1"></i>12% growth
+                    </small>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="stat-card">
+                    <div class="stat-number" data-count="{{ total_parcels }}">0</div>
+                    <p class="text-muted mb-2 fw-semibold">Land Parcels</p>
+                    <div class="progress" style="height: 6px;">
+                        <div class="progress-bar bg-info" style="width: 78%"></div>
+                    </div>
+                    <small class="text-info">
+                        <i class="fas fa-plus me-1"></i>24 new this month
+                    </small>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="stat-card">
+                    <div class="stat-number" data-count="{{ total_cultivated_area|floatformat:0 }}">0</div>
+                    <p class="text-muted mb-2 fw-semibold">Hectares Cultivated</p>
+                    <div class="progress" style="height: 6px;">
+                        <div class="progress-bar bg-warning" style="width: 92%"></div>
+                    </div>
+                    <small class="text-warning">
+                        <i class="fas fa-chart-line me-1"></i>8% yield increase
+                    </small>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="stat-card">
+                    <div class="stat-number" data-count="98">0</div>
+                    <p class="text-muted mb-2 fw-semibold">Satisfaction Rate</p>
+                    <div class="progress" style="height: 6px;">
+                        <div class="progress-bar bg-danger" style="width: 98%"></div>
+                    </div>
+                    <small class="text-danger">
+                        <i class="fas fa-heart me-1"></i>98% happy users
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section id="features" class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold display-4 mb-3">Revolutionary Agricultural Platform</h2>
+            <p class="lead text-muted">Powered by AI and machine learning for unprecedented insights</p>
+        </div>
+        
+        <div class="row g-4">
+            {% for feature in features %}
+            <div class="col-lg-4 col-md-6">
+                <div class="card feature-card h-100 text-center border-0 bg-transparent">
+                    <div class="card-body p-4">
+                        <div class="feature-icon">
+                            <i class="{{ feature.icon }}"></i>
+                        </div>
+                        <h5 class="card-title fw-bold mb-3">{{ feature.title }}</h5>
+                        <p class="card-text text-muted mb-4">
+                            {{ feature.description }}
+                        </p>
+                        <div class="feature-highlights">
+                            {% for highlight in feature.highlights %}
+                            <div class="d-flex align-items-center mb-2">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                <small class="text-muted">{{ highlight }}</small>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Feature Showcase -->
+        <div class="row mt-5 pt-5">
+            <div class="col-lg-6">
+                <div class="feature-highlight h-100">
+                    <div class="feature-icon mb-4">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3 class="fw-bold mb-3">AI-Powered Predictions</h3>
+                    <p class="text-muted mb-4">
+                        Our advanced machine learning algorithms analyze historical data and current conditions to predict crop yields, optimal planting times, and potential risks with 95% accuracy.
+                    </p>
+                    <div class="row text-center">
+                        <div class="col-4">
+                            <div class="fw-bold text-primary fs-3">95%</div>
+                            <small class="text-muted">Accuracy</small>
+                        </div>
+                        <div class="col-4">
+                            <div class="fw-bold text-success fs-3">24h</div>
+                            <small class="text-muted">Predictions</small>
+                        </div>
+                        <div class="col-4">
+                            <div class="fw-bold text-warning fs-3">50+</div>
+                            <small class="text-muted">Data Points</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="feature-highlight h-100">
+                    <div class="feature-icon mb-4">
+                        <i class="fas fa-satellite"></i>
+                    </div>
+                    <h3 class="fw-bold mb-3">Satellite Monitoring</h3>
+                    <p class="text-muted mb-4">
+                        Real-time satellite imagery combined with drone data provides unparalleled visibility into your fields, detecting issues before they impact your yield.
+                    </p>
+                    <div class="row text-center">
+                        <div class="col-4">
+                            <div class="fw-bold text-info fs-3">5m</div>
+                            <small class="text-muted">Resolution</small>
+                        </div>
+                        <div class="col-4">
+                            <div class="fw-bold text-danger fs-3">Real</div>
+                            <small class="text-muted">Time</small>
+                        </div>
+                        <div class="col-4">
+                            <div class="fw-bold text-purple fs-3">99.9%</div>
+                            <small class="text-muted">Uptime</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Recent Activity Section -->
+<section class="py-5 bg-white">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h3 class="fw-bold mb-1">Live Field Activities</h3>
+                        <p class="text-muted mb-0">Real-time updates from your agricultural operations</p>
+                    </div>
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'land_parcel_list' %}" class="glow-button">
+                        View All Parcels <i class="fas fa-arrow-right ms-2"></i>
+                    </a>
+                    {% endif %}
+                </div>
+                
+                <div class="card border-0 shadow-lg">
+                    <div class="card-header bg-transparent py-4">
+                        <h5 class="card-title mb-0"><i class="fas fa-broadcast-tower me-2 text-primary"></i>Live Monitoring Dashboard</h5>
+                    </div>
+                    <div class="card-body p-0">
+                        {% if recent_parcels %}
+                        <div class="list-group list-group-flush">
+                            {% for parcel in recent_parcels %}
+                            <div class="list-group-item d-flex justify-content-between align-items-center py-4 parcel-card">
+                                <div class="flex-grow-1">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <h6 class="mb-0 fw-semibold me-3">{{ parcel.parcel_id }}</h6>
+                                        <span class="badge bg-success rounded-pill">
+                                            <i class="fas fa-circle me-1" style="font-size: 6px;"></i>
+                                            Active
+                                        </span>
+                                    </div>
+                                    <small class="text-muted">
+                                        <i class="fas fa-user me-1"></i>{{ parcel.land_holder.name }} • 
+                                        <i class="fas fa-map-marker-alt me-1"></i>{{ parcel.land_holder.region.name }}
+                                    </small>
+                                    <div class="mt-3">
+                                        <span class="badge soil-badge bg-{% if parcel.soil_type == 'clay' %}warning{% elif parcel.soil_type == 'sandy' %}info{% else %}success{% endif %} me-2">
+                                            <i class="fas fa-mountain me-1"></i>{{ parcel.get_soil_type_display }}
+                                        </span>
+                                        <span class="badge soil-badge bg-primary me-2">
+                                            <i class="fas fa-ruler-combined me-1"></i>{{ parcel.total_area }} ha
+                                        </span>
+                                        <span class="badge soil-badge bg-success">
+                                            <i class="fas fa-seedling me-1"></i>{{ parcel.cultivated_area }} ha cultivated
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="text-end">
+                                    <div class="mb-2">
+                                        <small class="text-muted">Last updated</small>
+                                        <div class="fw-semibold">{{ parcel.updated_at|timesince }} ago</div>
+                                    </div>
+                                    <div class="progress" style="width: 100px; height: 8px;">
+                                        <div class="progress-bar bg-success" style="width: {{ parcel.cultivated_area|divisibleby:parcel.total_area|default:75 }}%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        <div class="text-center py-5">
+                            <i class="fas fa-inbox fa-4x text-muted mb-3"></i>
+                            <h5 class="text-muted">No Active Land Parcels</h5>
+                            <p class="text-muted mb-4">Start monitoring your agricultural operations today.</p>
+                            {% if user.is_authenticated %}
+                            <a href="{% url 'admin:land_analysis_landparcel_add' %}" class="glow-button">
+                                <i class="fas fa-plus me-2"></i>Add First Parcel
+                            </a>
+                            {% else %}
+                            <a href="{% url 'login' %}" class="glow-button">
+                                <i class="fas fa-sign-in-alt me-2"></i>Login to Get Started
+                            </a>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Pricing Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold display-5 mb-3">Simple, Transparent Pricing</h2>
+            <p class="lead text-muted">Choose the plan that works best for your agricultural needs</p>
+        </div>
+        
+        <div class="row g-4 justify-content-center">
+            <div class="col-lg-4 col-md-6">
+                <div class="pricing-card">
+                    <h5 class="fw-bold mb-3">Starter</h5>
+                    <div class="mb-4">
+                        <span class="h1 fw-bold text-primary">₹29</span>
+                        <span class="text-muted">/month</span>
+                    </div>
+                    <ul class="list-unstyled mb-4">
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Up to 50 land parcels</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Basic analytics</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Email support</li>
+                        <li class="mb-2"><i class="fas fa-times text-muted me-2"></i>Advanced reports</li>
+                        <li class="mb-2"><i class="fas fa-times text-muted me-2"></i>AI predictions</li>
+                    </ul>
+                    <a href="{% url 'signup' %}" class="btn btn-outline-primary w-100">Get Started</a>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6">
+                <div class="pricing-card popular">
+                    <h5 class="fw-bold mb-3">Professional</h5>
+                    <div class="mb-4">
+                        <span class="h1 fw-bold text-warning">₹79</span>
+                        <span class="text-muted">/month</span>
+                    </div>
+                    <ul class="list-unstyled mb-4">
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Up to 200 land parcels</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Advanced analytics</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Priority support</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Custom reports</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Basic AI insights</li>
+                    </ul>
+                    <a href="{% url 'signup' %}" class="glow-button w-100">Get Started</a>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6">
+                <div class="pricing-card">
+                    <h5 class="fw-bold mb-3">Enterprise</h5>
+                    <div class="mb-4">
+                        <span class="h1 fw-bold text-success">₹199</span>
+                        <span class="text-muted">/month</span>
+                    </div>
+                    <ul class="list-unstyled mb-4">
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Unlimited parcels</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Premium analytics</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>24/7 support</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Advanced AI predictions</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Satellite integration</li>
+                    </ul>
+                    <a href="{% url 'signup' %}" class="btn btn-outline-success w-100">Contact Sales</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section">
+    <div class="container">
+        <div class="row justify-content-center text-center">
+            <div class="col-lg-8">
+                <h2 class="fw-bold display-5 mb-4">Ready to Revolutionize Your Agriculture?</h2>
+                <p class="lead text-muted mb-4">
+                    Join the agricultural revolution with AI-powered insights, real-time monitoring, and data-driven decisions that maximize your yield and sustainability.
+                </p>
+                <div class="d-flex flex-wrap justify-content-center gap-3">
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'dashboard' %}" class="glow-button">
+                        <i class="fas fa-rocket me-2"></i>Explore Dashboard
+                    </a>
+                    <a href="{% url 'analysis_reports' %}" class="btn btn-outline-primary btn-lg px-5 py-3">
+                        <i class="fas fa-chart-bar me-2"></i>View Reports
+                    </a>
+                    {% else %}
+                    <a href="{% url 'signup' %}" class="glow-button">
+                        <i class="fas fa-star me-2"></i>Start Free Trial
+                    </a>
+                    <a href="#features" class="btn btn-outline-primary btn-lg px-5 py-3">
+                        <i class="fas fa-video me-2"></i>Watch Demo
+                    </a>
+                    {% endif %}
+                </div>
+                <div class="mt-4">
+                    <small class="text-muted">
+                        <i class="fas fa-shield-alt me-2"></i>30-day money-back guarantee • No credit card required
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials Section -->
+<section class="py-5 bg-white">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold mb-3">Trusted by Agricultural Leaders</h2>
+            <p class="text-muted">Join thousands of successful farmers and agricultural professionals</p>
+        </div>
+        <div class="row g-4">
+            {% for testimonial in testimonials %}
+            <div class="col-md-4">
+                <div class="testimonial-card h-100">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="bg-primary bg-opacity-10 rounded-circle p-3 me-3">
+                            <i class="{{ testimonial.icon }} text-primary"></i>
+                        </div>
+                        <div>
+                            <h6 class="mb-0 fw-bold">{{ testimonial.name }}</h6>
+                            <small class="text-muted">{{ testimonial.role }}</small>
+                        </div>
+                    </div>
+                    <p class="card-text text-muted position-relative z-1">
+                        {{ testimonial.text }}
+                    </p>
+                    <div class="text-warning">
+                        {% for i in "12345" %}
+                        <i class="fas fa-star"></i>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Enhanced statistics counting with progress bars
+        const statElements = document.querySelectorAll('.stat-number');
+        
+        statElements.forEach(stat => {
+            const target = parseInt(stat.getAttribute('data-count'));
+            let current = 0;
+            const increment = target / 100;
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    stat.textContent = target;
+                    clearInterval(timer);
+                } else {
+                    stat.textContent = Math.floor(current);
+                }
+            }, 20);
+        });
+
+        // Intersection Observer for scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all animated elements
+        document.querySelectorAll('.feature-card, .stat-card, .testimonial-card, .pricing-card').forEach(element => {
+            element.style.opacity = '0';
+            element.style.transform = 'translateY(30px)';
+            element.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(element);
+        });
+
+        // Interactive map hover effects
+        const interactiveMap = document.querySelector('.interactive-map');
+        if (interactiveMap) {
+            interactiveMap.addEventListener('mouseenter', function() {
+                this.style.transform = 'scale(1.02) rotate(1deg)';
+            });
+            
+            interactiveMap.addEventListener('mouseleave', function() {
+                this.style.transform = 'scale(1) rotate(0deg)';
+            });
+        }
+
+        // Weather widget animation
+        const weatherWidget = document.querySelector('.weather-widget');
+        if (weatherWidget) {
+            setInterval(() => {
+                weatherWidget.style.transform = 'scale(1.05)';
+                setTimeout(() => {
+                    weatherWidget.style.transform = 'scale(1)';
+                }, 300);
+            }, 5000);
+        }
+
+        // News ticker pause on hover
+        const ticker = document.querySelector('.ticker-content');
+        if (ticker) {
+            ticker.parentElement.addEventListener('mouseenter', () => {
+                ticker.style.animationPlayState = 'paused';
+            });
+            
+            ticker.parentElement.addEventListener('mouseleave', () => {
+                ticker.style.animationPlayState = 'running';
+            });
+        }
+
+        // Floating elements animation
+        const floatingElements = document.querySelectorAll('.floating-element');
+        floatingElements.forEach((element, index) => {
+            element.style.animationDuration = (15 + index * 5) + 's';
+            element.style.animationDelay = (index * 2) + 's';
+        });
+
+        // Glow button effects
+        const glowButtons = document.querySelectorAll('.glow-button');
+        glowButtons.forEach(button => {
+            button.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-3px) scale(1.02)';
+            });
+            
+            button.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        // Parcel card interactions
+        const parcelCards = document.querySelectorAll('.parcel-card');
+        parcelCards.forEach(card => {
+            card.addEventListener('click', function() {
+                this.style.transform = 'translateY(-5px) scale(1.02)';
+                setTimeout(() => {
+                    this.style.transform = 'translateY(-5px)';
+                }, 150);
+            });
+        });
+
+        // Feature card staggered animation
+        const featureCards = document.querySelectorAll('.feature-card');
+        featureCards.forEach((card, index) => {
+            card.style.transitionDelay = (index * 0.1) + 's';
+        });
+    });
+
+    // Add some dynamic data for demonstration
+    const features = [
+        {
+            icon: 'fas fa-map-marked-alt',
+            title: 'Smart Land Analysis',
+            description: 'AI-powered land assessment with soil health monitoring and optimal utilization recommendations.',
+            highlights: ['Soil health scoring', 'Land utilization metrics', 'Ownership pattern analysis']
+        },
+        {
+            icon: 'fas fa-tint',
+            title: 'Precision Irrigation',
+            description: 'Smart water management with real-time monitoring and automated irrigation scheduling.',
+            highlights: ['Water efficiency tracking', 'Automated scheduling', 'Conservation analytics']
+        },
+        {
+            icon: 'fas fa-leaf',
+            title: 'Crop Intelligence',
+            description: 'Advanced crop monitoring with disease detection and yield prediction algorithms.',
+            highlights: ['Disease detection', 'Yield prediction', 'Growth monitoring']
+        },
+        {
+            icon: 'fas fa-chart-line',
+            title: 'Productivity Analytics',
+            description: 'Comprehensive performance tracking with benchmarking and improvement recommendations.',
+            highlights: ['Performance benchmarking', 'Trend analysis', 'Improvement insights']
+        },
+        {
+            icon: 'fas fa-cloud-sun',
+            title: 'Weather Integration',
+            description: 'Real-time weather data integration with predictive analytics for optimal planning.',
+            highlights: ['Real-time weather data', 'Predictive analytics', 'Seasonal planning']
+        },
+        {
+            icon: 'fas fa-robot',
+            title: 'AI Assistant',
+            description: '24/7 AI-powered agricultural assistant for instant insights and recommendations.',
+            highlights: ['24/7 availability', 'Instant insights', 'Personalized recommendations']
+        }
+    ];
+
+    const testimonials = [
+        {
+            icon: 'fas fa-user-tie',
+            name: 'Rajesh Kumar',
+            role: 'Farm Manager',
+            text: 'AgriSite helped us increase crop yield by 25% through better irrigation planning and soil analysis. The AI predictions are incredibly accurate.'
+        },
+        {
+            icon: 'fas fa-user',
+            name: 'Priya Sharma',
+            role: 'Agricultural Consultant',
+            text: 'The comprehensive land analysis features have revolutionized how we advise our clients. Data-driven decisions have never been easier or more effective.'
+        },
+        {
+            icon: 'fas fa-user-md',
+            name: 'Dr. Anil Patel',
+            role: 'Research Scientist',
+            text: 'As a researcher, I appreciate the depth of analysis available. The platform provides excellent tools for agricultural research and planning.'
+        }
+    ];
+</script>
+{% endblock %}

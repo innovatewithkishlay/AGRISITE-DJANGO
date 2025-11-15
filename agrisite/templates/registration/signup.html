@@ -1,0 +1,314 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block breadcrumb_items %}
+<li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+<li class="breadcrumb-item active" aria-current="page">Sign Up</li>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .signup-section {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        padding: 40px 0;
+    }
+
+    .signup-card {
+        border: none;
+        border-radius: 20px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(10px);
+        background: rgba(255, 255, 255, 0.95);
+        overflow: hidden;
+    }
+
+    .signup-header {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        color: white;
+        padding: 3rem 2rem;
+        text-align: center;
+        border-bottom: none;
+    }
+
+    .signup-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        display: block;
+    }
+
+    .signup-body {
+        padding: 3rem 2rem;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: var(--text-dark);
+        margin-bottom: 0.5rem;
+    }
+
+    .btn-signup {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        border: none;
+        padding: 12px 30px;
+        border-radius: 10px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        width: 100%;
+    }
+
+    .btn-signup:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(46, 125, 50, 0.3);
+    }
+
+    .login-link {
+        text-align: center;
+        margin-top: 2rem;
+        padding-top: 2rem;
+        border-top: 1px solid #e9ecef;
+    }
+
+    .password-requirements {
+        background: rgba(46, 125, 50, 0.05);
+        border-radius: 10px;
+        padding: 1.5rem;
+        margin-top: 1rem;
+    }
+
+    .requirement-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .requirement-list li {
+        margin-bottom: 0.5rem;
+        font-size: 0.9rem;
+    }
+
+    .requirement-list li i {
+        width: 20px;
+        margin-right: 10px;
+    }
+
+    .requirement-valid {
+        color: var(--success);
+    }
+
+    .requirement-invalid {
+        color: var(--danger);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Signup Section -->
+<section class="signup-section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-xl-6 col-lg-7 col-md-8">
+                <div class="card signup-card">
+                    <!-- Header -->
+                    <div class="card-header signup-header">
+                        <i class="fas fa-user-plus signup-icon"></i>
+                        <h2 class="fw-bold mb-2">Join AgriSite Today</h2>
+                        <p class="mb-0 opacity-75">Create your account to access powerful land analysis tools</p>
+                    </div>
+
+                    <!-- Body -->
+                    <div class="card-body signup-body">
+                        {% if messages %}
+                        <div class="mb-4">
+                            {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                                <i class="fas 
+                                    {% if message.tags == 'success' %}fa-check-circle
+                                    {% elif message.tags == 'error' or message.tags == 'danger' %}fa-exclamation-circle
+                                    {% elif message.tags == 'warning' %}fa-exclamation-triangle
+                                    {% else %}fa-info-circle{% endif %} me-2">
+                                </i>
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+
+                        <form method="post" class="needs-validation" novalidate>
+                            {% csrf_token %}
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="{{ form.first_name.id_for_label }}" class="form-label">
+                                            <i class="fas fa-user me-2"></i>First Name
+                                        </label>
+                                        {{ form.first_name|add_class:"form-control form-control-lg" }}
+                                        {% if form.first_name.errors %}
+                                        <div class="text-danger small mt-1">
+                                            {{ form.first_name.errors }}
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="{{ form.last_name.id_for_label }}" class="form-label">
+                                            <i class="fas fa-user me-2"></i>Last Name
+                                        </label>
+                                        {{ form.last_name|add_class:"form-control form-control-lg" }}
+                                        {% if form.last_name.errors %}
+                                        <div class="text-danger small mt-1">
+                                            {{ form.last_name.errors }}
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="{{ form.username.id_for_label }}" class="form-label">
+                                    <i class="fas fa-at me-2"></i>Username
+                                </label>
+                                {{ form.username|add_class:"form-control form-control-lg" }}
+                                {% if form.username.errors %}
+                                <div class="text-danger small mt-1">
+                                    {{ form.username.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+
+                            <div class="form-group">
+                                <label for="{{ form.email.id_for_label }}" class="form-label">
+                                    <i class="fas fa-envelope me-2"></i>Email Address
+                                </label>
+                                {{ form.email|add_class:"form-control form-control-lg" }}
+                                {% if form.email.errors %}
+                                <div class="text-danger small mt-1">
+                                    {{ form.email.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+
+                            <div class="form-group">
+                                <label for="{{ form.password1.id_for_label }}" class="form-label">
+                                    <i class="fas fa-lock me-2"></i>Password
+                                </label>
+                                {{ form.password1|add_class:"form-control form-control-lg" }}
+                                {% if form.password1.errors %}
+                                <div class="text-danger small mt-1">
+                                    {{ form.password1.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+
+                            <div class="form-group">
+                                <label for="{{ form.password2.id_for_label }}" class="form-label">
+                                    <i class="fas fa-lock me-2"></i>Confirm Password
+                                </label>
+                                {{ form.password2|add_class:"form-control form-control-lg" }}
+                                {% if form.password2.errors %}
+                                <div class="text-danger small mt-1">
+                                    {{ form.password2.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Password Requirements -->
+                            <div class="password-requirements">
+                                <h6 class="fw-bold mb-3">
+                                    <i class="fas fa-shield-alt me-2"></i>Password Requirements
+                                </h6>
+                                <ul class="requirement-list">
+                                    <li>
+                                        <i class="fas fa-check requirement-valid"></i>
+                                        At least 8 characters long
+                                    </li>
+                                    <li>
+                                        <i class="fas fa-check requirement-valid"></i>
+                                        Cannot be too common
+                                    </li>
+                                    <li>
+                                        <i class="fas fa-check requirement-valid"></i>
+                                        Cannot be entirely numeric
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="form-group form-check mt-4">
+                                <input type="checkbox" class="form-check-input" id="terms" required>
+                                <label class="form-check-label" for="terms">
+                                    I agree to the <a href="#" class="text-primary">Terms of Service</a> and <a href="#" class="text-primary">Privacy Policy</a>
+                                </label>
+                                <div class="invalid-feedback">
+                                    You must agree to the terms and conditions.
+                                </div>
+                            </div>
+
+                            <div class="d-grid mt-4">
+                                <button type="submit" class="btn btn-signup btn-lg">
+                                    <i class="fas fa-user-plus me-2"></i>Create Account
+                                </button>
+                            </div>
+                        </form>
+
+                        <div class="login-link">
+                            <p class="text-muted mb-0">
+                                Already have an account? 
+                                <a href="{% url 'login' %}" class="text-primary fw-semibold">Sign In</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Form validation
+        const forms = document.querySelectorAll('.needs-validation');
+        
+        Array.from(forms).forEach(form => {
+            form.addEventListener('submit', event => {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+
+        // Real-time password validation
+        const password1 = document.querySelector('#id_password1');
+        const password2 = document.querySelector('#id_password2');
+
+        function validatePassword() {
+            if (password1.value && password2.value) {
+                if (password1.value !== password2.value) {
+                    password2.setCustomValidity('Passwords do not match');
+                } else {
+                    password2.setCustomValidity('');
+                }
+            }
+        }
+
+        if (password1 && password2) {
+            password1.addEventListener('input', validatePassword);
+            password2.addEventListener('input', validatePassword);
+        }
+    });
+</script>
+{% endblock %}

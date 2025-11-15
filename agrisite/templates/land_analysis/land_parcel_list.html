@@ -1,0 +1,1071 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Land Parcels - AgriSite{% endblock %}
+
+{% block extra_css %}
+<style>
+:root {
+    --primary-gradient: linear-gradient(135deg, #2e7d32 0%, #4caf50 50%, #8bc34a 100%);
+    --secondary-gradient: linear-gradient(135deg, #8bc34a 0%, #cddc39 100%);
+    --dark-green: #1b5e20;
+    --light-green: #e8f5e9;
+    --accent-orange: #ff9800;
+    --accent-blue: #2196f3;
+    --accent-purple: #9c27b0;
+    --glass-bg: rgba(255, 255, 255, 0.1);
+    --glass-border: rgba(255, 255, 255, 0.2);
+    --shadow-light: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --shadow-medium: 0 10px 25px rgba(0, 0, 0, 0.15);
+    --shadow-heavy: 0 20px 50px rgba(0, 0, 0, 0.2);
+}
+
+/* Enhanced Page Header */
+.page-header {
+    background: var(--primary-gradient);
+    color: white;
+    padding: 3rem 0;
+    margin-bottom: 2rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.page-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+}
+
+/* Enhanced Card Design */
+.parcel-card {
+    background: white;
+    border: none;
+    border-radius: 20px;
+    box-shadow: var(--shadow-light);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    height: 100%;
+}
+
+.parcel-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: var(--primary-gradient);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.parcel-card:hover::before {
+    transform: scaleX(1);
+}
+
+.parcel-card:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--shadow-heavy);
+}
+
+.parcel-card.active {
+    border: 2px solid var(--accent-blue);
+    box-shadow: 0 0 30px rgba(33, 150, 243, 0.3);
+}
+
+/* Enhanced Card Header */
+.card-header {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    padding: 1.5rem;
+    position: relative;
+}
+
+.parcel-id {
+    font-weight: 800;
+    font-size: 1.2rem;
+    color: var(--dark-green);
+    letter-spacing: 0.5px;
+}
+
+/* Enhanced Badges */
+.soil-badge {
+    padding: 8px 16px;
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: var(--shadow-light);
+}
+
+.badge-clay { background: linear-gradient(135deg, #ff9800, #ff5722); color: white; }
+.badge-sandy { background: linear-gradient(135deg, #2196f3, #03a9f4); color: white; }
+.badge-loamy { background: linear-gradient(135deg, #4caf50, #8bc34a); color: white; }
+.badge-silt { background: linear-gradient(135deg, #9c27b0, #e91e63); color: white; }
+.badge-peat { background: linear-gradient(135deg, #795548, #5d4037); color: white; }
+
+/* Enhanced Card Body */
+.card-body {
+    padding: 1.5rem;
+}
+
+.parcel-info {
+    margin-bottom: 1.5rem;
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.75rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+
+.info-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.info-icon {
+    width: 32px;
+    height: 32px;
+    background: var(--light-green);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 12px;
+    color: var(--dark-green);
+    font-size: 0.9rem;
+}
+
+.info-content {
+    flex: 1;
+}
+
+.info-label {
+    font-weight: 600;
+    color: var(--dark-green);
+    font-size: 0.9rem;
+    margin-bottom: 2px;
+}
+
+.info-value {
+    color: #666;
+    font-size: 0.95rem;
+}
+
+/* Enhanced Progress Bars */
+.area-progress {
+    margin: 1rem 0;
+}
+
+.progress-container {
+    background: #f8f9fa;
+    border-radius: 10px;
+    height: 8px;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+}
+
+.progress-bar {
+    height: 100%;
+    border-radius: 10px;
+    background: var(--primary-gradient);
+    position: relative;
+    transition: width 1s ease-in-out;
+}
+
+.progress-bar::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+.progress-text {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    color: #666;
+}
+
+/* Enhanced Filters */
+.filter-section {
+    background: white;
+    border-radius: 15px;
+    padding: 1.5rem;
+    box-shadow: var(--shadow-light);
+    margin-bottom: 2rem;
+}
+
+.filter-group {
+    margin-bottom: 1rem;
+}
+
+.filter-label {
+    font-weight: 600;
+    color: var(--dark-green);
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.enhanced-select {
+    background: white;
+    border: 2px solid #e9ecef;
+    border-radius: 12px;
+    padding: 0.75rem 1rem;
+    width: 100%;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.enhanced-select:focus {
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
+    outline: none;
+}
+
+/* Enhanced Buttons */
+.glow-button {
+    background: var(--primary-gradient);
+    border: none;
+    border-radius: 12px;
+    padding: 0.75rem 1.5rem;
+    color: white;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(46, 125, 50, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.glow-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: left 0.5s;
+}
+
+.glow-button:hover::before {
+    left: 100%;
+}
+
+.glow-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(46, 125, 50, 0.4);
+}
+
+/* Action Buttons */
+.action-buttons {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.btn-action {
+    flex: 1;
+    border: none;
+    border-radius: 10px;
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.btn-view {
+    background: var(--accent-blue);
+    color: white;
+}
+
+.btn-analyze {
+    background: var(--accent-orange);
+    color: white;
+}
+
+.btn-map {
+    background: var(--accent-purple);
+    color: white;
+}
+
+.btn-action:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-medium);
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+}
+
+.empty-icon {
+    font-size: 4rem;
+    color: #ddd;
+    margin-bottom: 1.5rem;
+    animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-10px); }
+    60% { transform: translateY(-5px); }
+}
+
+/* Quick Stats */
+.quick-stats {
+    background: white;
+    border-radius: 15px;
+    padding: 1.5rem;
+    box-shadow: var(--shadow-light);
+    margin-bottom: 2rem;
+}
+
+.stat-item {
+    text-align: center;
+    padding: 1rem;
+}
+
+.stat-number {
+    font-size: 2.5rem;
+    font-weight: 800;
+    background: var(--primary-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+}
+
+.stat-label {
+    color: #666;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+/* Search and Filter Bar */
+.search-filter-bar {
+    background: white;
+    border-radius: 15px;
+    padding: 1.5rem;
+    box-shadow: var(--shadow-light);
+    margin-bottom: 2rem;
+}
+
+.search-box {
+    position: relative;
+}
+
+.search-input {
+    width: 100%;
+    padding: 0.75rem 1rem 0.75rem 3rem;
+    border: 2px solid #e9ecef;
+    border-radius: 12px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.search-input:focus {
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
+    outline: none;
+}
+
+.search-icon {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #666;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .page-header {
+        padding: 2rem 0;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+    }
+    
+    .filter-section {
+        padding: 1rem;
+    }
+    
+    .stat-number {
+        font-size: 2rem;
+    }
+}
+
+/* Loading Animation */
+.loading-spinner {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255,255,255,.3);
+    border-radius: 50%;
+    border-top-color: #fff;
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Map Preview */
+.map-preview {
+    height: 120px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 10px;
+    margin: 1rem 0;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.map-preview::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+.map-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.map-preview:hover .map-overlay {
+    opacity: 1;
+}
+
+.map-text {
+    color: white;
+    font-weight: 600;
+    text-align: center;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Enhanced Page Header -->
+<div class="page-header">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1 class="display-5 fw-bold mb-3">Land Parcels Management</h1>
+                <p class="lead mb-4">Comprehensive overview and management of all agricultural land parcels with advanced analytics and monitoring.</p>
+                <div class="d-flex flex-wrap gap-3">
+                    <button class="glow-button" onclick="showAddParcelModal()">
+                        <i class="fas fa-plus me-2"></i>Add New Parcel
+                    </button>
+                    <button class="btn btn-outline-light" onclick="exportParcelData()">
+                        <i class="fas fa-download me-2"></i>Export Data
+                    </button>
+                    <button class="btn btn-outline-light" onclick="showBulkActions()">
+                        <i class="fas fa-tasks me-2"></i>Bulk Actions
+                    </button>
+                </div>
+            </div>
+            <div class="col-lg-4 text-lg-end">
+                <div class="bg-white bg-opacity-20 rounded-3 p-3 d-inline-block">
+                    <div class="text-white">
+                        <i class="fas fa-map-marked-alt fa-3x mb-3"></i>
+                        <h4 class="mb-1">{{ parcels|length }} Parcels</h4>
+                        <small>Active Monitoring</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid py-4">
+    <!-- Quick Statistics -->
+    <div class="row quick-stats">
+        <div class="col-md-3 col-6">
+            <div class="stat-item">
+                <div class="stat-number">{{ total_area|floatformat:0 }}</div>
+                <div class="stat-label">Total Area (ha)</div>
+            </div>
+        </div>
+        <div class="col-md-3 col-6">
+            <div class="stat-item">
+                <div class="stat-number">{{ cultivated_area|floatformat:0 }}</div>
+                <div class="stat-label">Cultivated (ha)</div>
+            </div>
+        </div>
+        <div class="col-md-3 col-6">
+            <div class="stat-item">
+                <div class="stat-number">{{ regions.count }}</div>
+                <div class="stat-label">Regions</div>
+            </div>
+        </div>
+        <div class="col-md-3 col-6">
+            <div class="stat-item">
+                <div class="stat-number">{{ unique_crops }}</div>
+                <div class="stat-label">Crop Types</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search and Filter Bar -->
+    <div class="search-filter-bar">
+        <div class="row g-3 align-items-end">
+            <div class="col-md-4">
+                <div class="search-box">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" class="search-input" placeholder="Search parcels, holders, regions..." id="searchInput" onkeyup="filterParcels()">
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="filter-group">
+                    <label class="filter-label">Region</label>
+                    <select class="enhanced-select" id="regionFilter" onchange="applyFilters()">
+                        <option value="">All Regions</option>
+                        {% for region in regions %}
+                        <option value="{{ region.id }}" {% if request.GET.region == region.id|stringformat:"i" %}selected{% endif %}>
+                            {{ region.name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="filter-group">
+                    <label class="filter-label">Soil Type</label>
+                    <select class="enhanced-select" id="soilFilter" onchange="applyFilters()">
+                        <option value="">All Soil Types</option>
+                        {% for soil_type in soil_types %}
+                        <option value="{{ soil_type.0 }}" {% if request.GET.soil_type == soil_type.0 %}selected{% endif %}>
+                            {{ soil_type.1 }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="filter-group">
+                    <label class="filter-label">Status</label>
+                    <select class="enhanced-select" id="statusFilter" onchange="applyFilters()">
+                        <option value="">All Status</option>
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                        <option value="harvested">Harvested</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <button class="glow-button w-100" onclick="clearFilters()">
+                    <i class="fas fa-refresh me-2"></i>Reset
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Parcels Grid -->
+    <div class="row" id="parcelsContainer">
+        {% for parcel in parcels %}
+        <div class="col-xl-4 col-lg-6 mb-4 parcel-item" 
+             data-region="{{ parcel.land_holder.region.id }}"
+             data-soil="{{ parcel.soil_type }}"
+             data-search="{{ parcel.parcel_id }} {{ parcel.land_holder.name }} {{ parcel.land_holder.region.name }}">
+            <div class="parcel-card" onclick="selectParcel(this)" data-parcel-id="{{ parcel.id }}">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <div class="parcel-id">
+                        <i class="fas fa-map-marker-alt me-2"></i>{{ parcel.parcel_id }}
+                    </div>
+                    <span class="soil-badge badge-{{ parcel.soil_type }}">
+                        {{ parcel.get_soil_type_display }}
+                    </span>
+                </div>
+                
+                <div class="card-body">
+                    <!-- Map Preview -->
+                    <div class="map-preview" onclick="event.stopPropagation(); viewParcelOnMap('{{ parcel.id }}')">
+                        <div class="map-overlay">
+                            <div class="map-text">
+                                <i class="fas fa-expand-arrows-alt me-2"></i>
+                                View on Map
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Parcel Information -->
+                    <div class="parcel-info">
+                        <div class="info-item">
+                            <div class="info-icon">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="info-content">
+                                <div class="info-label">Land Holder</div>
+                                <div class="info-value">{{ parcel.land_holder.name }}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="info-item">
+                            <div class="info-icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div class="info-content">
+                                <div class="info-label">Region</div>
+                                <div class="info-value">{{ parcel.land_holder.region.name }}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="info-item">
+                            <div class="info-icon">
+                                <i class="fas fa-ruler-combined"></i>
+                            </div>
+                            <div class="info-content">
+                                <div class="info-label">Area Details</div>
+                                <div class="info-value">{{ parcel.total_area }} ha total</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Area Progress -->
+                    <div class="area-progress">
+                        <div class="progress-container">
+                            <div class="progress-bar" style="width: {{ parcel.cultivated_area|divisibleby:parcel.total_area|default:50 }}%"></div>
+                        </div>
+                        <div class="progress-text">
+                            <span>{{ parcel.cultivated_area }} ha cultivated</span>
+                            <span>{{ parcel.cultivation_percentage|default:50 }}%</span>
+                        </div>
+                    </div>
+
+                    <!-- Irrigation Info -->
+                    {% if parcel.irrigation %}
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <i class="fas fa-tint"></i>
+                        </div>
+                        <div class="info-content">
+                            <div class="info-label">Irrigation System</div>
+                            <div class="info-value">
+                                {{ parcel.irrigation.get_system_type_display }}
+                                <small class="text-muted">({{ parcel.irrigation.efficiency_rating }}% efficiency)</small>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <!-- Action Buttons -->
+                    <div class="action-buttons">
+                        <button class="btn-action btn-view" onclick="event.stopPropagation(); viewParcelDetails('{{ parcel.id }}')">
+                            <i class="fas fa-eye"></i>Details
+                        </button>
+                        <button class="btn-action btn-analyze" onclick="event.stopPropagation(); analyzeParcel('{{ parcel.id }}')">
+                            <i class="fas fa-chart-line"></i>Analyze
+                        </button>
+                        <button class="btn-action btn-map" onclick="event.stopPropagation(); viewParcelOnMap('{{ parcel.id }}')">
+                            <i class="fas fa-map"></i>Map
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="empty-state">
+                <div class="empty-icon">
+                    <i class="fas fa-map-marked-alt"></i>
+                </div>
+                <h3 class="text-muted mb-3">No Land Parcels Found</h3>
+                <p class="text-muted mb-4">No land parcels match your current search criteria or filters.</p>
+                <button class="glow-button" onclick="clearFilters()">
+                    <i class="fas fa-refresh me-2"></i>Clear Filters
+                </button>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    {% if parcels.has_other_pages %}
+    <div class="row mt-4">
+        <div class="col-12">
+            <nav aria-label="Parcel pagination">
+                <ul class="pagination justify-content-center">
+                    {% if parcels.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ parcels.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
+                            <i class="fas fa-chevron-left"></i>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% for num in parcels.paginator.page_range %}
+                    <li class="page-item {% if parcels.number == num %}active{% endif %}">
+                        <a class="page-link" href="?page={{ num }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
+                            {{ num }}
+                        </a>
+                    </li>
+                    {% endfor %}
+
+                    {% if parcels.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ parcels.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
+                            <i class="fas fa-chevron-right"></i>
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Add Parcel Modal -->
+<div class="modal fade" id="addParcelModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add New Land Parcel</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addParcelForm">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Parcel ID</label>
+                            <input type="text" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Land Holder</label>
+                            <select class="form-control" required>
+                                <option value="">Select Land Holder</option>
+                                <!-- Options would be populated dynamically -->
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Total Area (ha)</label>
+                            <input type="number" class="form-control" step="0.01" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Cultivated Area (ha)</label>
+                            <input type="number" class="form-control" step="0.01" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Soil Type</label>
+                            <select class="form-control" required>
+                                {% for soil_type in soil_types %}
+                                <option value="{{ soil_type.0 }}">{{ soil_type.1 }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Primary Crop</label>
+                            <input type="text" class="form-control">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="glow-button" onclick="saveParcel()">Save Parcel</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Global variables
+let selectedParcels = new Set();
+
+// Filter parcels based on search input
+function filterParcels() {
+    const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+    const parcelItems = document.querySelectorAll('.parcel-item');
+    
+    parcelItems.forEach(item => {
+        const searchData = item.getAttribute('data-search').toLowerCase();
+        if (searchData.includes(searchTerm)) {
+            item.style.display = 'block';
+        } else {
+            item.style.display = 'none';
+        }
+    });
+}
+
+// Apply all filters
+function applyFilters() {
+    const regionFilter = document.getElementById('regionFilter').value;
+    const soilFilter = document.getElementById('soilFilter').value;
+    const statusFilter = document.getElementById('statusFilter').value;
+    
+    const parcelItems = document.querySelectorAll('.parcel-item');
+    
+    parcelItems.forEach(item => {
+        const region = item.getAttribute('data-region');
+        const soil = item.getAttribute('data-soil');
+        
+        const regionMatch = !regionFilter || region === regionFilter;
+        const soilMatch = !soilFilter || soil === soilFilter;
+        
+        if (regionMatch && soilMatch) {
+            item.style.display = 'block';
+        } else {
+            item.style.display = 'none';
+        }
+    });
+}
+
+// Clear all filters
+function clearFilters() {
+    document.getElementById('searchInput').value = '';
+    document.getElementById('regionFilter').value = '';
+    document.getElementById('soilFilter').value = '';
+    document.getElementById('statusFilter').value = '';
+    
+    const parcelItems = document.querySelectorAll('.parcel-item');
+    parcelItems.forEach(item => {
+        item.style.display = 'block';
+    });
+}
+
+// Select parcel for bulk actions
+function selectParcel(element) {
+    const parcelId = element.getAttribute('data-parcel-id');
+    
+    if (selectedParcels.has(parcelId)) {
+        selectedParcels.delete(parcelId);
+        element.classList.remove('active');
+    } else {
+        selectedParcels.add(parcelId);
+        element.classList.add('active');
+    }
+    
+    updateSelectionCounter();
+}
+
+// Update selection counter
+function updateSelectionCounter() {
+    // You can implement a selection counter in the UI
+    console.log(`${selectedParcels.size} parcels selected`);
+}
+
+// View parcel details
+function viewParcelDetails(parcelId) {
+    // Show loading state
+    const button = event.target;
+    const originalText = button.innerHTML;
+    button.innerHTML = '<div class="loading-spinner"></div> Loading...';
+    button.disabled = true;
+    
+    // Simulate API call
+    setTimeout(() => {
+        window.location.href = `/parcels/${parcelId}/`;
+    }, 1000);
+}
+
+// Analyze parcel
+function analyzeParcel(parcelId) {
+    const button = event.target;
+    const originalText = button.innerHTML;
+    button.innerHTML = '<div class="loading-spinner"></div> Analyzing...';
+    button.disabled = true;
+    
+    // Simulate analysis
+    setTimeout(() => {
+        alert(`Analysis started for parcel ${parcelId}. You will be redirected to the analysis dashboard.`);
+        button.innerHTML = originalText;
+        button.disabled = false;
+        // window.location.href = `/analysis/parcel/${parcelId}/`;
+    }, 1500);
+}
+
+// View parcel on map
+function viewParcelOnMap(parcelId) {
+    // Simulate map integration
+    const modal = new bootstrap.Modal(document.getElementById('mapModal') || createMapModal());
+    modal.show();
+    
+    // In real implementation, this would load the actual map
+    setTimeout(() => {
+        alert(`Map view for parcel ${parcelId} would open here with integrated GIS data.`);
+    }, 500);
+}
+
+// Create map modal dynamically
+function createMapModal() {
+    const modalDiv = document.createElement('div');
+    modalDiv.className = 'modal fade';
+    modalDiv.id = 'mapModal';
+    modalDiv.innerHTML = `
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Parcel Map View</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div style="height: 500px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white;">
+                        <div class="text-center">
+                            <i class="fas fa-map fa-4x mb-3"></i>
+                            <h4>Interactive Map</h4>
+                            <p>Integrated GIS and satellite data would display here</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(modalDiv);
+    return modalDiv;
+}
+
+// Show add parcel modal
+function showAddParcelModal() {
+    const modal = new bootstrap.Modal(document.getElementById('addParcelModal'));
+    modal.show();
+}
+
+// Save new parcel
+function saveParcel() {
+    const form = document.getElementById('addParcelForm');
+    const saveButton = document.querySelector('#addParcelModal .glow-button');
+    
+    if (form.checkValidity()) {
+        // Show loading state
+        const originalText = saveButton.innerHTML;
+        saveButton.innerHTML = '<div class="loading-spinner"></div> Saving...';
+        saveButton.disabled = true;
+        
+        // Simulate API call
+        setTimeout(() => {
+            alert('Parcel added successfully!');
+            bootstrap.Modal.getInstance(document.getElementById('addParcelModal')).hide();
+            saveButton.innerHTML = originalText;
+            saveButton.disabled = false;
+            form.reset();
+            
+            // In real implementation, this would refresh the page or update the list
+            location.reload();
+        }, 2000);
+    } else {
+        form.reportValidity();
+    }
+}
+
+// Export parcel data
+function exportParcelData() {
+    const button = event.target;
+    const originalText = button.innerHTML;
+    button.innerHTML = '<div class="loading-spinner"></div> Exporting...';
+    button.disabled = true;
+    
+    // Simulate export process
+    setTimeout(() => {
+        alert('Parcel data exported successfully! A CSV file will be downloaded.');
+        button.innerHTML = originalText;
+        button.disabled = false;
+        
+        // In real implementation, this would trigger a file download
+        // window.location.href = '/export/parcels/csv/';
+    }, 1500);
+}
+
+// Show bulk actions
+function showBulkActions() {
+    if (selectedParcels.size === 0) {
+        alert('Please select at least one parcel to perform bulk actions.');
+        return;
+    }
+    
+    // Show bulk actions modal or dropdown
+    alert(`Bulk actions available for ${selectedParcels.size} selected parcels:\n- Update Status\n- Export Selected\n- Mass Analysis\n- Send Notifications`);
+}
+
+// Initialize page
+document.addEventListener('DOMContentLoaded', function() {
+    // Add any initialization code here
+    console.log('Land Parcels page initialized');
+    
+    // Add smooth scrolling to filters
+    const filterInputs = document.querySelectorAll('.enhanced-select, .search-input');
+    filterInputs.forEach(input => {
+        input.addEventListener('focus', function() {
+            this.parentElement.style.transform = 'scale(1.02)';
+        });
+        
+        input.addEventListener('blur', function() {
+            this.parentElement.style.transform = 'scale(1)';
+        });
+    });
+    
+    // Add keyboard shortcuts
+    document.addEventListener('keydown', function(e) {
+        if (e.ctrlKey && e.key === 'f') {
+            e.preventDefault();
+            document.getElementById('searchInput').focus();
+        }
+        
+        if (e.key === 'Escape') {
+            clearFilters();
+        }
+    });
+});
+
+// Enhanced card hover effects
+document.querySelectorAll('.parcel-card').forEach(card => {
+    card.addEventListener('mouseenter', function() {
+        this.style.transform = 'translateY(-10px) scale(1.02)';
+    });
+    
+    card.addEventListener('mouseleave', function() {
+        if (!this.classList.contains('active')) {
+            this.style.transform = 'translateY(0) scale(1)';
+        }
+    });
+});
+
+// Real-time search with debounce
+let searchTimeout;
+document.getElementById('searchInput').addEventListener('input', function() {
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(filterParcels, 300);
+});
+</script>
+{% endblock %}

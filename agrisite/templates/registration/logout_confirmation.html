@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}Logout Confirmation - AgriSite{% endblock %}
+
+{% block breadcrumb_items %}
+<li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+<li class="breadcrumb-item active" aria-current="page">Logout</li>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-lg border-0 rounded-3 mt-5">
+                <div class="card-header bg-gradient-primary text-white text-center py-4">
+                    <h3 class="font-weight-light my-0">
+                        <i class="fas fa-sign-out-alt me-2"></i>Confirm Logout
+                    </h3>
+                </div>
+                <div class="card-body text-center p-5">
+                    <div class="mb-4">
+                        <i class="fas fa-question-circle fa-4x text-warning mb-3"></i>
+                        <h4 class="fw-bold">Are you sure you want to logout?</h4>
+                        <p class="text-muted">You will be signed out of your AgriSite account.</p>
+                    </div>
+                    
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-danger btn-lg">
+                                <i class="fas fa-sign-out-alt me-2"></i>Yes, Logout
+                            </button>
+                            <a href="{% url 'home' %}" class="btn btn-outline-secondary">
+                                <i class="fas fa-times me-2"></i>Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug Parcels</title>
+</head>
+<body>
+    <h1>Available Parcels in Database</h1>
+    <ul>
+    {% for parcel in parcels %}
+        <li>ID: {{ parcel.id }} - Parcel ID: {{ parcel.parcel_id }} - Holder: {{ parcel.land_holder__name }}</li>
+    {% empty %}
+        <li>No parcels found in database!</li>
+    {% endfor %}
+    </ul>
+    <a href="{% url 'land_parcel_list' %}">Back to Parcel List</a>
+</body>
+</html>

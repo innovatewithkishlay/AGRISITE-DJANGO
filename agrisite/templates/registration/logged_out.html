@@ -1,0 +1,370 @@
+{% extends 'base.html' %}
+
+{% block title %}Logged Out - AgriSite - Land Insights & Analysis{% endblock %}
+
+{% block breadcrumb_items %}
+<li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+<li class="breadcrumb-item active" aria-current="page">Logged Out</li>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .logout-section {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        padding: 40px 0;
+    }
+
+    .logout-card {
+        border: none;
+        border-radius: 20px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(10px);
+        background: rgba(255, 255, 255, 0.95);
+        overflow: hidden;
+    }
+
+    .logout-header {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        color: white;
+        padding: 3rem 2rem;
+        text-align: center;
+        border-bottom: none;
+    }
+
+    .logout-icon {
+        font-size: 4rem;
+        margin-bottom: 1.5rem;
+        display: block;
+    }
+
+    .logout-body {
+        padding: 3rem 2rem;
+        text-align: center;
+    }
+
+    .success-animation {
+        animation: successBounce 1s ease-in-out;
+    }
+
+    @keyframes successBounce {
+        0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+        40% {transform: translateY(-10px);}
+        60% {transform: translateY(-5px);}
+    }
+
+    .security-features {
+        background: rgba(46, 125, 50, 0.05);
+        border-radius: 15px;
+        padding: 2rem;
+        margin-top: 2rem;
+    }
+
+    .feature-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1rem;
+        padding: 0.5rem;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+    }
+
+    .feature-item:hover {
+        background: rgba(46, 125, 50, 0.1);
+        transform: translateX(5px);
+    }
+
+    .feature-icon {
+        width: 40px;
+        height: 40px;
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        margin-right: 1rem;
+        flex-shrink: 0;
+    }
+
+    .btn-login {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        border: none;
+        padding: 12px 30px;
+        border-radius: 10px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-login:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(46, 125, 50, 0.3);
+    }
+
+    .session-info {
+        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+        border-radius: 10px;
+        padding: 1.5rem;
+        margin-top: 2rem;
+    }
+
+    .countdown {
+        font-size: 0.9rem;
+        color: var(--text-light);
+        margin-top: 1rem;
+    }
+
+    .auto-redirect {
+        background: rgba(46, 125, 50, 0.1);
+        border-radius: 10px;
+        padding: 1rem;
+        margin-top: 1rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Logout Section -->
+<section class="logout-section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-xl-5 col-lg-6 col-md-8">
+                <div class="card logout-card">
+                    <!-- Header -->
+                    <div class="card-header logout-header">
+                        <i class="fas fa-check-circle logout-icon success-animation"></i>
+                        <h2 class="fw-bold mb-2">Successfully Signed Out</h2>
+                        <p class="mb-0 opacity-75">You have been securely logged out of AgriSite</p>
+                    </div>
+
+                    <!-- Body -->
+                    <div class="card-body logout-body">
+                        <div class="mb-4">
+                            <h4 class="fw-bold text-dark mb-3">Session Ended Securely</h4>
+                            <p class="text-muted mb-4">
+                                Your AgriSite session has been successfully terminated. All your personal information 
+                                and data are protected and secure.
+                            </p>
+                        </div>
+
+                        <!-- Security Features -->
+                        <div class="security-features">
+                            <h6 class="fw-bold text-dark mb-3">
+                                <i class="fas fa-shield-alt me-2"></i>Security Status
+                            </h6>
+                            <div class="feature-item">
+                                <div class="feature-icon">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <div class="text-start">
+                                    <strong class="d-block">Session Cleared</strong>
+                                    <small class="text-muted">All temporary session data has been removed</small>
+                                </div>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-icon">
+                                    <i class="fas fa-lock"></i>
+                                </div>
+                                <div class="text-start">
+                                    <strong class="d-block">Authentication Revoked</strong>
+                                    <small class="text-muted">Access tokens and credentials are no longer valid</small>
+                                </div>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-icon">
+                                    <i class="fas fa-user-shield"></i>
+                                </div>
+                                <div class="text-start">
+                                    <strong class="d-block">Privacy Protected</strong>
+                                    <small class="text-muted">Your personal information remains secure</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="d-grid gap-3 mt-4">
+                            <a href="{% url 'login' %}" class="btn btn-login btn-lg">
+                                <i class="fas fa-sign-in-alt me-2"></i>Sign In Again
+                            </a>
+                            <a href="{% url 'home' %}" class="btn btn-outline-primary btn-lg">
+                                <i class="fas fa-home me-2"></i>Return to Homepage
+                            </a>
+                        </div>
+
+                        <!-- Additional Options -->
+                        <div class="mt-4 pt-3 border-top">
+                            <div class="row g-2">
+                                <div class="col-6">
+                                    <a href="#" class="btn btn-sm btn-outline-secondary w-100">
+                                        <i class="fas fa-question-circle me-1"></i>Help
+                                    </a>
+                                </div>
+                                <div class="col-6">
+                                    <a href="#" class="btn btn-sm btn-outline-secondary w-100">
+                                        <i class="fas fa-envelope me-1"></i>Contact Support
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Auto Redirect Info -->
+                        <div class="auto-redirect mt-3">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <small class="text-muted">
+                                    <i class="fas fa-info-circle me-1"></i>
+                                    You will be redirected to homepage in <span id="countdown">10</span> seconds
+                                </small>
+                                <a href="{% url 'home' %}" class="btn btn-sm btn-link p-0">
+                                    Go now
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Security Tips -->
+                        <div class="session-info mt-4">
+                            <h6 class="fw-bold text-dark mb-2">
+                                <i class="fas fa-lightbulb me-2"></i>Security Tips
+                            </h6>
+                            <ul class="list-unstyled text-start small text-muted mb-0">
+                                <li class="mb-1">
+                                    <i class="fas fa-check text-success me-2"></i>
+                                    Always log out from shared computers
+                                </li>
+                                <li class="mb-1">
+                                    <i class="fas fa-check text-success me-2"></i>
+                                    Use strong, unique passwords
+                                </li>
+                                <li>
+                                    <i class="fas fa-check text-success me-2"></i>
+                                    Enable two-factor authentication if available
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Footer -->
+                    <div class="card-footer text-center py-3 bg-transparent border-0">
+                        <small class="text-muted">
+                            <i class="fas fa-clock me-1"></i>
+                            Session ended: {% now "F j, Y, g:i a" %}
+                        </small>
+                    </div>
+                </div>
+
+                <!-- Quick Stats -->
+                <div class="text-center mt-4">
+                    <div class="row g-3">
+                        <div class="col-4">
+                            <div class="bg-white rounded-3 p-3 shadow-sm">
+                                <i class="fas fa-user-clock text-primary mb-2"></i>
+                                <div class="small text-muted">Last Active</div>
+                                <div class="fw-bold">Just now</div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="bg-white rounded-3 p-3 shadow-sm">
+                                <i class="fas fa-shield-alt text-success mb-2"></i>
+                                <div class="small text-muted">Security</div>
+                                <div class="fw-bold">Protected</div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="bg-white rounded-3 p-3 shadow-sm">
+                                <i class="fas fa-redo text-info mb-2"></i>
+                                <div class="small text-muted">Ready</div>
+                                <div class="fw-bold">Re-login</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Auto redirect countdown
+        let countdown = 10;
+        const countdownElement = document.getElementById('countdown');
+        const countdownInterval = setInterval(function() {
+            countdown--;
+            countdownElement.textContent = countdown;
+            
+            if (countdown <= 0) {
+                clearInterval(countdownInterval);
+                window.location.href = "{% url 'home' %}";
+            }
+        }, 1000);
+
+        // Add some interactive animations
+        const featureItems = document.querySelectorAll('.feature-item');
+        featureItems.forEach((item, index) => {
+            item.style.animationDelay = `${index * 0.1}s`;
+            item.classList.add('animate__animated', 'animate__fadeInLeft');
+        });
+
+        // Add confetti effect on load
+        setTimeout(() => {
+            createConfetti();
+        }, 500);
+
+        function createConfetti() {
+            const colors = ['#2e7d32', '#4caf50', '#8bc34a', '#ffeb3b', '#ff9800'];
+            const confettiCount = 30;
+            
+            for (let i = 0; i < confettiCount; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.cssText = `
+                    position: fixed;
+                    width: 10px;
+                    height: 10px;
+                    background: ${colors[Math.floor(Math.random() * colors.length)]};
+                    top: -10px;
+                    left: ${Math.random() * 100}vw;
+                    opacity: ${Math.random() * 0.5 + 0.5};
+                    border-radius: ${Math.random() > 0.5 ? '50%' : '0'};
+                    animation: confettiFall ${Math.random() * 3 + 2}s linear forwards;
+                    z-index: 1000;
+                    pointer-events: none;
+                `;
+                document.body.appendChild(confetti);
+                
+                // Remove confetti after animation
+                setTimeout(() => {
+                    confetti.remove();
+                }, 5000);
+            }
+        }
+
+        // Add confetti animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes confettiFall {
+                0% {
+                    transform: translateY(0) rotate(0deg);
+                    opacity: 1;
+                }
+                100% {
+                    transform: translateY(100vh) rotate(360deg);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    });
+
+    // Allow user to cancel auto-redirect
+    document.addEventListener('click', function() {
+        const countdownElement = document.getElementById('countdown');
+        if (countdownElement) {
+            countdownElement.parentElement.innerHTML = '<i class="fas fa-info-circle me-1"></i>Auto-redirect cancelled';
+        }
+    });
+</script>
+{% endblock %}
